@@ -33,6 +33,7 @@ library(tidyverse)
 library(here)
 library(janitor)
 library(vembedr)
+library(bit)
 ```
 
 
