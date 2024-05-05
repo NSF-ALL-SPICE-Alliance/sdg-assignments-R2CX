@@ -29,6 +29,9 @@ library(ggpubr)
 library(janitor)
 library(ggcorrplot)
 library(vembedr)
+library(bit)
+library(ggplot2)
+library(ggpubr)
 ```
 
 
@@ -157,6 +160,24 @@ cor <- cor(sdr_scores_matrix, use = "complete.obs")
 
 
 Finally, we can plot the correlation coefficients with ggcorrplot!
+```{r}
+install.packages("ggplot2")
+```
+```{r}
+```
+
+
+
+
+
+```{r}
+install.packages(ggplotly)
+```
+```{r}
+library(ggplotly)
+```
+
+
 
 
 ```{r}
@@ -214,6 +235,31 @@ ggplot(sdr_data, aes(x = goal_12_score,
     
     - **Hint** to be able to tell which point is which country, you will have to add `label = country` in the aes function after you tell ggplot what you which scores you want on the x and y axis
      - **Hint** to use the ggplotly() function, you will need to use `library()` to load in the plotly package in the first code chunk in this R Markdown
+```{r}
+ggplot(sdr_data, aes(x = goal_10_score, 
+                     y = goal_3_score)) +
+  geom_point() +
+  geom_smooth() +
+  stat_cor() +
+  theme_minimal() +
+  labs(title= "Coorelations of Scores",
+       x = "Goal 10 Score",
+       y = "Goal 3 Scores",
+       label = "Country") 
+ggplot(label = "Country")
+
+```
+
+
+
+
+
+
+
+
+
+
+
 
   - in 4-6 sentences, come up with a hypotheses for the positive or negative correlation between the 2 goals
       
