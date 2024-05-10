@@ -37,7 +37,20 @@ library(factoextra) # visualizes clusters
 library(pdp)
 library(vembedr)
 ```
+library(tidyverse) 
+library(janitor) 
+library(here)
+library(naniar) 
+#library(missForest)
+library(cluster) 
+library(randomForest) 
+library(missRanger) 
+library(factoextra) 
+library(pdp)
+library(vembedr)
+```{r}
 
+```
 
 ```{r, echo=FALSE}
 embed_url("https://www.youtube.com/watch?v=ZFtoi7PWjVw")
@@ -341,11 +354,45 @@ Edit this code chunk `rf_matmort <- randomForest(normalized_score_sdg3_matmort ~
 
 - Rename the random forest model from rf_matmort to something that more accurately represents the model (base the name on the indicator you are predicting)
 
-  - Run the remainder of the code chunks below to see the different outputs
-    
-    - *Hint* make sure to continue replacing rf_matmort with the new name you assign your random forest model
+
+```{r}
+rf_slavery <- randomForest(normalized_score_sdg8_slavery ~ . , data = sdr_data_imputed, importance = TRUE)
+```
+```{r}
+importance_df <- as.data.frame(rf_slavery$importance)
+```
+```{r}
+install.packages("wesanderson")
+```
 
 
+
+```{r}
+importance_df_top_10 <- importance_df %>%
+  rownames_to_column(var = "variable") %>%
+  slice_max(n = 10, order_by = `%IncMSE`)
+```
+
+
+
+
+```{r}
+ggplot(importance_df_top_10, aes( x = `%IncMSE`, y = reorder(variable, `%IncMSE`))) +
+  geom_bar(stat = "identity", fill = "STeelblue", color = "black" ) + 
+  theme_minimal() + 
+  labs(title = "Important Variables In Slavery",
+       subtitle = "Top 10",
+       y = "SDG Indicator",
+       x = "Feature Importance (% Increase in Mean Squared Error)")
+```
+
+```{r}
+pdp::partial(rf_slavery, pred.var = "normalized_score_sdg8_slavery", plot = TRUE)
+```
+```{r}
+pd <- pdp::partial(rf_slavery, pred.var = c("normalized_score_sdg8_slavery", "normalized_score_sdg9_roads"))
+plotPartial(pd)
+```
 
 
 
